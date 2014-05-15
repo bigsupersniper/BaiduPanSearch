@@ -127,6 +127,7 @@
             // 
             // SearchForm
             // 
+            this.AcceptButton = this.cmdSearch;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(764, 497);
@@ -138,6 +139,7 @@
             this.Controls.Add(this.tbKey);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmdSearch);
+            this.MaximizeBox = false;
             this.Name = "SearchForm";
             this.Text = "百度网盘搜索";
             this.ResumeLayout(false);
