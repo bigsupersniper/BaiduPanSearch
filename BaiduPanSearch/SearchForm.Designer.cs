@@ -41,6 +41,7 @@
             this.cmdNext = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label4 = new System.Windows.Forms.Label();
+            this.cbCheckStatus = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // cmdSearch
@@ -154,12 +155,27 @@
             this.label4.TabIndex = 12;
             this.label4.Text = "Copyright © LINFENG 2014";
             // 
+            // cbCheckStatus
+            // 
+            this.cbCheckStatus.AutoSize = true;
+            this.cbCheckStatus.Checked = true;
+            this.cbCheckStatus.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbCheckStatus.Location = new System.Drawing.Point(449, 64);
+            this.cbCheckStatus.Name = "cbCheckStatus";
+            this.cbCheckStatus.Size = new System.Drawing.Size(96, 16);
+            this.cbCheckStatus.TabIndex = 13;
+            this.cbCheckStatus.Text = "开启状态检测";
+            this.cbCheckStatus.UseVisualStyleBackColor = true;
+            this.cbCheckStatus.CheckedChanged += new System.EventHandler(this.cbCheckStatus_CheckedChanged);
+            // 
             // SearchForm
             // 
             this.AcceptButton = this.cmdSearch;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(764, 528);
+            this.Controls.Add(this.cbCheckStatus);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.cmdNext);
@@ -193,6 +209,7 @@
         private System.Windows.Forms.ColumnHeader 状态;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox cbCheckStatus;
     }
 }
 

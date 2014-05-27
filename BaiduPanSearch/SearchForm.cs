@@ -23,8 +23,7 @@ namespace BaidupanSearch
         private static List<ListViewItem> searchResult = null;
         private static AutoCompleteStringCollection searchKeysHistory = null;
         private static string browser = "";
-        private static readonly int rn = 35;
-        private static readonly int pagesize = 30;
+        private static readonly int rn = 30;
         private static int totalcount = 0;
         private static int page = 1;
         private static int totalpage = 0;
@@ -149,6 +148,7 @@ namespace BaidupanSearch
         {
             statusCheckWorker = new BackgroundWorker();
             statusCheckWorker.WorkerReportsProgress = true;
+            statusCheckWorker.WorkerSupportsCancellation = true;
 
             statusCheckWorker.DoWork += (sender, e) =>
             {
@@ -158,21 +158,25 @@ namespace BaidupanSearch
                 for (int i = 0; i < count; i++)
                 {
                     var item = searchResult[i];
-                    bool active = false;
-
-                    string link = item.SubItems[2].Text;
-                    Uri resUri = null;
-
-                    try
+                    //判断是否存在已经检测过的链接
+                    if (item.SubItems[1].Text == "")
                     {
-                        string html = AsyncHttpGet(link, out resUri);
-                        HtmlAgilityPack.HtmlDocument hd = new HtmlAgilityPack.HtmlDocument();
-                        hd.LoadHtml(html);
-                        active = hd.GetElementbyId("share_nofound_des") == null;
-                    }
-                    catch { }
+                        bool active = false;
 
-                    ls.Add(new { Status = active, Item = item, Uri = resUri });
+                        string link = item.SubItems[2].Text;
+                        Uri resUri = null;
+
+                        try
+                        {
+                            string html = AsyncHttpGet(link, out resUri);
+                            HtmlAgilityPack.HtmlDocument hd = new HtmlAgilityPack.HtmlDocument();
+                            hd.LoadHtml(html);
+                            active = hd.GetElementbyId("share_nofound_des") == null;
+                        }
+                        catch { }
+
+                        ls.Add(new { Status = active, Item = item, Uri = resUri });
+                    }
 
                     //每检测5条记录报告下进度
                     if (count <= 5)
@@ -197,6 +201,9 @@ namespace BaidupanSearch
                             }
                         }
                     }
+
+                    //如果线程被取消则退出
+                    if (statusCheckWorker.CancellationPending) break;
                 }
             };
 
@@ -305,15 +312,25 @@ namespace BaidupanSearch
                 if (searchResult.Count > 0)
                 {
                     lvResult.Items.AddRange(searchResult.ToArray());
-                    totalpage = totalcount % pagesize == 0 ? totalcount / pagesize : totalcount / pagesize + 1;
+                    totalpage = totalcount % rn == 0 ? totalcount / rn : totalcount / rn + 1;
                     SetResultLabel(totalcount, page, totalpage);
                 }
                 else
                 {
                     SetResultLabel(0, 0, 0);
                 }
-
-                statusCheckWorker.RunWorkerAsync();
+                //判断是否开启检测
+                if (cbCheckStatus.Checked)
+                {
+                    progressBar1.Value = 10;
+                    statusCheckWorker.RunWorkerAsync();
+                }
+                else
+                {
+                    cmdSearch.Enabled = true;
+                    cmdPrevious.Enabled = page > 1;
+                    cmdNext.Enabled = page < totalpage;
+                }          
             };
         }
 
@@ -330,7 +347,7 @@ namespace BaidupanSearch
 
         private void SetResultLabel(int total, int page, int totalpage)
         {
-            lbResult.Text = string.Format("共 {0} 条 , 当前第 {1} 页 , 共 {2} 页 ", total, page, totalpage);
+            lbResult.Text = string.Format("共 {0} 条 , 当前第 {1} 页 , 每页 {2} 条 , 共 {3} 页 ", total, page, rn, totalpage);
         }
 
         public SearchForm()
@@ -392,6 +409,36 @@ namespace BaidupanSearch
         {
             page++;
             Search();
+        }
+
+        private void cbCheckStatus_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!cbCheckStatus.Checked)
+            {
+                if (statusCheckWorker.IsBusy)
+                {
+                    statusCheckWorker.CancelAsync();
+                }
+            }
+            else
+            {
+                if (lvResult.Items.Count > 0)
+                {
+                    //判断是否全部状态都已经检测过
+                    foreach (ListViewItem item in lvResult.Items)
+                    {
+                        if (item.SubItems[1].Text == "")
+                        {
+                            cmdSearch.Enabled = false;
+                            cmdPrevious.Enabled = false;
+                            cmdNext.Enabled = false;
+
+                            statusCheckWorker.RunWorkerAsync();
+                            break;
+                        }
+                    }
+                }
+            }          
         }
 
     }
