@@ -54,7 +54,6 @@ namespace BaidupanSearch
                 HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
                 req.Method = "GET";
                 req.Timeout = 30000;
-                //req.CachePolicy = new HttpRequestCachePolicy(HttpCacheAgeControl.MaxAge, TimeSpan.FromDays(1));
 
                 int reqTime = 0;
                 System.Timers.Timer timer = null;
