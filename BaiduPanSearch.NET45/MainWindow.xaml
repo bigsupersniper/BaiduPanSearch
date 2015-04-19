@@ -21,6 +21,7 @@
         <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource baseFontStyle}">
             <Setter Property="Height" Value="25" />
             <Setter Property="ToolTip" Value="{Binding Path=Url}" />
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
         </Style>
 
@@ -32,9 +33,10 @@
     </Window.Resources>
 
     <Grid>
-        <ListView x:Name="lvResult"  HorizontalAlignment="Left" Height="350" Margin="16,113,0,0" VerticalAlignment="Top" Width="699" MouseDoubleClick="lvResult_MouseDoubleClick" SelectionMode="Single" >
+        <ListView x:Name="lvResult" HorizontalAlignment="Left" Height="350" Margin="16,113,0,0" VerticalAlignment="Top" Width="699" MouseDoubleClick="lvResult_MouseDoubleClick" SelectionMode="Single" >
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
+                    <GridViewColumn Header="序号" DisplayMemberBinding="{Binding No}" Width="45" />
                     <GridViewColumn Header="标题" DisplayMemberBinding="{Binding Title}" Width="600" />
                 </GridView>
             </ListView.View>

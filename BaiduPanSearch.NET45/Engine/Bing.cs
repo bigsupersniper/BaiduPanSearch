@@ -34,13 +34,15 @@ namespace BaiduPanSearch.NET45.Engine
                 if (h2s != null && h2s.Count > 0)
                 {
                     var ls = new List<GridRowItem>();
-                    foreach (var h2 in h2s)
+                    for (int i = 0; i < h2s.Count; i++)
                     {
+                        var h2 = h2s[i];
                         string title = HttpUtility.HtmlDecode(h2.InnerText);
                         string url = base.ParseUrl(HttpUtility.HtmlDecode(h2.Attributes["href"].Value));
 
                         ls.Add(new GridRowItem
                         {
+                            No = i + 1,
                             Title = title,
                             Url = url
                         });

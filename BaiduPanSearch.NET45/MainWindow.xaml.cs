@@ -124,7 +124,7 @@ namespace BaiduPanSearch.NET45
             btnSearch.Cursor = Cursors.AppStarting;
             pbProgress.IsIndeterminate = true;
             jobDone = false;
-            
+
             try
             {
                 var engineItem = cbbEngine.SelectedItem as DropdownItem;

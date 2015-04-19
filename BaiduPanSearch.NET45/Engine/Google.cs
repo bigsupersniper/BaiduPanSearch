@@ -34,8 +34,9 @@ namespace BaiduPanSearch.NET45.Engine
                 if (lis != null && lis.Count > 0)
                 {
                     var ls = new List<GridRowItem>();
-                    foreach (var h2 in lis)
+                    for (int i = 0; i < lis.Count; i++)
                     {
+                        var h2 = lis[i];
                         string title = HttpUtility.HtmlDecode(h2.InnerText);
                         string href = h2.Attributes["href"].Value;
                         int start = href.IndexOf("/url?q=");
@@ -44,8 +45,10 @@ namespace BaiduPanSearch.NET45.Engine
                         {
                             url = base.ParseUrl(HttpUtility.HtmlDecode(href.Substring(start + 7)));
                         }
+
                         ls.Add(new GridRowItem
                         {
+                            No = i + 1,
                             Title = title,
                             Url = url
                         });

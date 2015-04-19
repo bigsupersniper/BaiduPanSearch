@@ -9,6 +9,11 @@ namespace BaiduPanSearch.NET45.Models
     public class GridRowItem
     {
         /// <summary>
+        /// 序号
+        /// </summary>
+        public int No { get; set; }
+
+        /// <summary>
         /// 标题
         /// </summary>
         public string Title { get; set; }
