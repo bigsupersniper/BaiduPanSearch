@@ -27,6 +27,7 @@ namespace BaiduPanSearch.NET45
     {
         string browser;
         ISearch engine;
+        bool jobDone = true;
 
         public MainWindow()
         {
@@ -87,7 +88,14 @@ namespace BaiduPanSearch.NET45
         /// <param name="page"></param>
         void SetResultStatus(string status, int page)
         {
-            lbResult.Content = status + string.Format("   当前第 {0} 页", page);
+            if (page < 1)
+            {
+                lbResult.Content = status;
+            }
+            else
+            {
+                lbResult.Content = status + string.Format("   当前第 {0} 页", page);
+            }
         }
 
         /// <summary>
@@ -110,10 +118,13 @@ namespace BaiduPanSearch.NET45
 
         private async void btnSearch_Click(object sender, RoutedEventArgs e)
         {
+            if (!jobDone) return;
             if (string.IsNullOrEmpty(tbKeyword.Text) || cbbEngine.SelectedIndex < 0) return;
 
+            btnSearch.Cursor = Cursors.AppStarting;
             pbProgress.IsIndeterminate = true;
-
+            jobDone = false;
+            
             try
             {
                 var engineItem = cbbEngine.SelectedItem as DropdownItem;
@@ -123,6 +134,10 @@ namespace BaiduPanSearch.NET45
                 {
                     lvResult.ItemsSource = ls;
                     SetResultStatus(engine.ResultStatus, engine.CurrentPage);
+                }
+                else
+                {
+                    SetResultStatus("未搜索到结果", 0);
                 }
 
                 RefreshButton(engine);
@@ -134,6 +149,8 @@ namespace BaiduPanSearch.NET45
             finally
             {
                 pbProgress.IsIndeterminate = false;
+                jobDone = true;
+                btnSearch.Cursor = Cursors.Arrow;
             }
         }
 
@@ -142,6 +159,8 @@ namespace BaiduPanSearch.NET45
             if (engine != null)
             {
                 pbProgress.IsIndeterminate = true;
+                jobDone = false;
+                btnPageUp.Cursor = Cursors.AppStarting;
 
                 try
                 {
@@ -160,6 +179,8 @@ namespace BaiduPanSearch.NET45
                 finally
                 {
                     pbProgress.IsIndeterminate = false;
+                    jobDone = true;
+                    btnPageUp.Cursor = Cursors.Arrow;
                 }
             }
         }
@@ -169,6 +190,8 @@ namespace BaiduPanSearch.NET45
             if (engine != null)
             {
                 pbProgress.IsIndeterminate = true;
+                jobDone = false;
+                btnPageDown.Cursor = Cursors.AppStarting;
 
                 try
                 {
@@ -187,6 +210,8 @@ namespace BaiduPanSearch.NET45
                 finally
                 {
                     pbProgress.IsIndeterminate = false;
+                    jobDone = true;
+                    btnPageDown.Cursor = Cursors.Arrow;
                 }
             }
         }

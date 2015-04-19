@@ -19,6 +19,8 @@
         <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource baseFontStyle}"></Style>
         <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource baseFontStyle}">
             <Setter Property="Height" Value="25" />
+            <Setter Property="ToolTip" Value="{Binding Path=Url}" />
+            <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
         </Style>
 
         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -29,7 +31,7 @@
     </Window.Resources>
 
     <Grid>
-        <ListView x:Name="lvResult"  HorizontalAlignment="Left" Height="350" Margin="16,113,0,0" VerticalAlignment="Top" Width="699" MouseDoubleClick="lvResult_MouseDoubleClick" SelectionMode="Single">
+        <ListView x:Name="lvResult"  HorizontalAlignment="Left" Height="350" Margin="16,113,0,0" VerticalAlignment="Top" Width="699" MouseDoubleClick="lvResult_MouseDoubleClick" SelectionMode="Single" >
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
                     <GridViewColumn Header="标题" DisplayMemberBinding="{Binding Title}" Width="600" />
@@ -37,7 +39,7 @@
             </ListView.View>
         </ListView>
         <Label Content="搜索关键字" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Margin="16,24,0,0" VerticalAlignment="Top" Width="79"/>
-        <TextBox x:Name="tbKeyword"  VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="100,24,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300" />
+        <TextBox x:Name="tbKeyword" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="100,24,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300" />
         <Button x:Name="btnSearch" Content="搜索" HorizontalAlignment="Left" Margin="414,24,0,0" VerticalAlignment="Top" Width="75" Click="btnSearch_Click" BorderBrush="#FF707070"/>
         <ComboBox x:Name="cbbEngine" HorizontalAlignment="Left" Margin="100,69,0,0" VerticalAlignment="Top" Height="25" Width="120" 
                VerticalContentAlignment="Center" DisplayMemberPath="Name" />
