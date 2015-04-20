@@ -27,6 +27,7 @@ namespace BaiduPanSearch.NET45
     {
         string browser;
         ISearch engine;
+        Stopwatch watch = new Stopwatch();
         bool jobDone = true;
 
         public MainWindow()
@@ -86,15 +87,15 @@ namespace BaiduPanSearch.NET45
         /// </summary>
         /// <param name="status"></param>
         /// <param name="page"></param>
-        void SetResultStatus(string status, int page)
+        void SetResultStatus(string status, long ms, int page)
         {
             if (page < 1)
             {
-                lbResult.Content = status;
+                lbResult.Content = status + string.Format("  用时 {0} 毫秒", ms);
             }
             else
             {
-                lbResult.Content = status + string.Format("   当前第 {0} 页", page);
+                lbResult.Content = status + string.Format("  用时 {0} 毫秒  当前第 {1} 页", ms, page);
             }
         }
 
@@ -129,15 +130,18 @@ namespace BaiduPanSearch.NET45
             {
                 var engineItem = cbbEngine.SelectedItem as DropdownItem;
                 engine = (ISearch)engineItem.EngineType.Assembly.CreateInstance(engineItem.EngineType.FullName);
+                watch.Restart();
                 var ls = await engine.Search(tbKeyword.Text);
+                watch.Stop();
                 if (ls != null)
                 {
                     lvResult.ItemsSource = ls;
-                    SetResultStatus(engine.ResultStatus, engine.CurrentPage);
+                    SetResultStatus(engine.ResultStatus, watch.ElapsedMilliseconds, engine.CurrentPage);
                 }
                 else
                 {
-                    SetResultStatus("未搜索到结果", 0);
+                    lvResult.ItemsSource = null;
+                    SetResultStatus("未搜索到结果", watch.ElapsedMilliseconds, 0);
                 }
 
                 RefreshButton(engine);
@@ -164,11 +168,13 @@ namespace BaiduPanSearch.NET45
 
                 try
                 {
+                    watch.Restart();
                     var ls = await engine.PageUp();
+                    watch.Stop();
                     if (ls != null)
                     {
                         lvResult.ItemsSource = ls;
-                        SetResultStatus(engine.ResultStatus, engine.CurrentPage);
+                        SetResultStatus(engine.ResultStatus, watch.ElapsedMilliseconds, engine.CurrentPage);
                     }
                     RefreshButton(engine);
                 }
@@ -195,11 +201,13 @@ namespace BaiduPanSearch.NET45
 
                 try
                 {
+                    watch.Restart();
                     var ls = await engine.PageDown();
+                    watch.Stop();
                     if (ls != null)
                     {
                         lvResult.ItemsSource = ls;
-                        SetResultStatus(engine.ResultStatus, engine.CurrentPage);
+                        SetResultStatus(engine.ResultStatus, watch.ElapsedMilliseconds, engine.CurrentPage);
                     }
                     RefreshButton(engine);
                 }

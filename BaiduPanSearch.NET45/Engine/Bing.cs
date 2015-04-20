@@ -83,7 +83,7 @@ namespace BaiduPanSearch.NET45.Engine
                                 var sb_count = b_results.SelectSingleNode("li/span[@class='sb_count']");
                                 if (sb_count != null)
                                 {
-                                    base.ResultStatus = "共" + sb_count.InnerText;
+                                    base.ResultStatus = "获得约 " + sb_count.InnerText;
                                     base.TotalPage = ParseTotal(sb_count.InnerText) / PageSize;
                                 }
 

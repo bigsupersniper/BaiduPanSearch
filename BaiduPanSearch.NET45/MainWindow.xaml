@@ -50,7 +50,7 @@
         <Button x:Name="btnPageUp" Content="上一页" HorizontalAlignment="Left"  Margin="527,24,0,0" VerticalAlignment="Top" Width="75" Click="btnPageUp_Click"/>
         <Button x:Name="btnPageDown" Content="下一页" HorizontalAlignment="Left"  Margin="640,24,0,0" VerticalAlignment="Top" Width="75" Click="btnPageDown_Click"/>
         <ProgressBar x:Name="pbProgress" HorizontalAlignment="Left" Height="3" Margin="16,464,0,0" VerticalAlignment="Top" Width="699"/>
-        <Label x:Name="lbResult" Content="" HorizontalAlignment="Left" Margin="16,470,0,0" VerticalAlignment="Top" Width="699"/>
+        <Label x:Name="lbResult" Content="" HorizontalContentAlignment="Right" HorizontalAlignment="Left" Margin="16,470,0,0" VerticalAlignment="Top" Width="699"/>
     </Grid>
 
 </Window>
